@@ -23,6 +23,7 @@ public class GuessTheNumberGame {
 
         // Crear un jugador de la computadora
         computerPlayer = new ComputerPlayer();
+        computerPlayer.setName("Computer");
 
         // Inicializar el juego y generar un número aleatorio
         targetNumber = new Random().nextInt(100) + 1;
@@ -60,7 +61,7 @@ public class GuessTheNumberGame {
     private void displayGuessResults(Player player) {
         int latestGuess = player.getGuesses().get(player.getGuesses().size() - 1);
         if (latestGuess == targetNumber) {
-            System.out.println(player.getName() + " ha adivinado el número. ¡Felicidades!");
+            System.out.println(player.getName() + " ha adivinado el número. ¡Felicidades!\nTodos tus intentos - "+ player.getGuesses());
         } else if (latestGuess < targetNumber) {
             System.out.println(player.getName() + " ha dicho un número demasiado bajo. Intenta de nuevo.");
         } else {
