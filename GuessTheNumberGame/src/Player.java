@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-abstract class Player {
+public abstract class Player {
     private String name;
     public int min = 1;
     public int max = 100;

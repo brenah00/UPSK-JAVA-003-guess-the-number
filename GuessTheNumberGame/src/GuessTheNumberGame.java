@@ -1,11 +1,12 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.io.InputStream;
 
 public class GuessTheNumberGame {
     private int targetNumber;
-    private Scanner scanner;
-    private HumanPlayer humanPlayer;
-    private ComputerPlayer computerPlayer;
+    private final Scanner scanner;
+    public HumanPlayer humanPlayer;
+    public ComputerPlayer computerPlayer;
 
     public static void main(String[] args) {
         System.out.println("BIENVENIDO A GUESS THE NUMBER. ");
@@ -13,20 +14,24 @@ public class GuessTheNumberGame {
         GuessTheNumberGame game = new GuessTheNumberGame();
         game.startGame();
     }
-
     public GuessTheNumberGame() {
-        // Crea un jugador humano
+        this(System.in); // Llama al constructor que acepta un InputStream con System.in por defecto
+    }
+
+    public GuessTheNumberGame(InputStream inputStream) {
+        // Se crea un jugador humano
         humanPlayer = new HumanPlayer();
         System.out.print("Ingresa tu nombre: ");
-        humanPlayer.setName(new Scanner(System.in).nextLine());
+        humanPlayer.setName(new Scanner(inputStream).nextLine());
 
-        // Crea un jugador de la computadora
+        // Se crea jugador computadora
         computerPlayer = new ComputerPlayer();
-        computerPlayer.setName("Computer");
+        computerPlayer.setName("COMPUTADORA");
 
         // Inicializa el juego y genera un número aleatorio
-        targetNumber = new Random().nextInt(100) + 1;
+        setTargetNumber(new Random().nextInt(100) + 1);
         scanner = new Scanner(System.in);
+
     }
 
     public void startGame() {
@@ -37,30 +42,36 @@ public class GuessTheNumberGame {
             System.out.println("************* ROUND "+ round +" ***************");
             // Turno del jugador humano
             humanPlayer.makeGuess();
+            System.out.println(displayGuessResult(humanPlayer));
             if (checkGuess(humanPlayer)) {
                 break;
             }
             System.out.println("-------------------------------");
             // Turno del jugador de la computadora
             computerPlayer.makeGuess();
+            System.out.println(displayGuessResult(computerPlayer));
             round++;
         }
         scanner.close();
     }
 
-    private boolean checkGuess(Player player) {
+    public boolean checkGuess(Player player) {
         int latestGuess = (player.getGuesses().isEmpty()) ? 0 : player.getGuesses().get(player.getGuesses().size() - 1);
-        if(latestGuess == 0){ return false; }
+        return latestGuess == targetNumber;
+    }
+    public String displayGuessResult(Player player){
+        int latestGuess = (player.getGuesses().isEmpty()) ? 0 : player.getGuesses().get(player.getGuesses().size() - 1);
         if (latestGuess == targetNumber) {
-            System.out.println(player.getName() + " ha adivinado el número. ¡Felicidades!\nTodos tus intentos - "+ player.getGuesses());
-            return true;
+            return player.getName() + " ha adivinado el número. ¡Felicidades!\nTodos tus intentos - "+ player.getGuesses();
         } else if (latestGuess < targetNumber) {
-            System.out.println(player.getName() + " ha dicho un número demasiado bajo. Intenta de nuevo.");
             player.setMin(latestGuess);
+            return player.getName() + " ha dicho un número demasiado bajo. Intenta de nuevo.";
         } else {
-            System.out.println(player.getName() + " ha dicho un número demasiado alto. Intenta de nuevo.");
             player.setMax(latestGuess);
+            return player.getName() + " ha dicho un número demasiado alto. Intenta de nuevo.";
         }
-        return false;
+    }
+    public void setTargetNumber(int targetNumber) {
+        this.targetNumber = targetNumber;
     }
 }

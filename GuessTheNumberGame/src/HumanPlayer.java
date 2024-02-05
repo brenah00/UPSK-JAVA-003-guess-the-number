@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-class HumanPlayer extends Player {
+public class HumanPlayer extends Player {
     public void makeGuess() {
         Scanner scanner = new Scanner(System.in); // Crear el Scanner una vez fuera del bucle
         System.out.print("TURNO DE " + getName() + ". Ingresa un número: ");

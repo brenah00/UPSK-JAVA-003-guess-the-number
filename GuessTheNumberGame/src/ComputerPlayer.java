@@ -1,5 +1,5 @@
 import java.util.Random;
-class ComputerPlayer extends Player {
+public class ComputerPlayer extends Player {
     @Override
     public void makeGuess() {
         int randomGuess = new Random().nextInt(max - min + 1) + min;
